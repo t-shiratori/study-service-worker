@@ -5,12 +5,9 @@ export const registerServiceWorker = async () => {
 
 	if ('serviceWorker' in navigator) {
 		try {
-			const registration = await navigator.serviceWorker.register(
-				'/service-worker.js',
-				// {
-				//   scope: '/',
-				// }
-			)
+			const registration = await navigator.serviceWorker.register('/service-worker.js', {
+				scope: '/',
+			})
 			_clg({ text: 'main.js registration', data: registration })
 			if (registration.installing) {
 				_clg({ text: 'main.js Service worker installing' })
@@ -25,27 +22,14 @@ export const registerServiceWorker = async () => {
 	}
 }
 
-// self.addEventListener('fetch', (event: ExtendableEvent) => {
-//   console.log('fetch!');
-// });
-
-// self.addEventListener('activate', (event: ExtendableEvent) => {
-//   console.log('activate!');
-// });
-
-// self.addEventListener('push', (event: ExtendableEvent) => {
-//   console.log('push!');
-// });
-
 registerServiceWorker()
 
 async function getData(url: string) {
 	_clg({ text: `main.js getData`, data: url })
-	// 既定のオプションには * が付いています
 	const response = await fetch(url, {
 		method: 'GET',
 	})
-	return response.json() // JSON のレスポンスをネイティブの JavaScript オブジェクトに解釈
+	return response.json()
 }
 
 getData('https://jsonplaceholder.typicode.com/todos/1').then((data) => {
