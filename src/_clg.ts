@@ -1,6 +1,6 @@
 type Tclg = {
 	text: string
-	data?: string | number | object
+	data?: string | number | object | null | undefined
 }
 
 export const _clg = ({ text, data }: Tclg) => {

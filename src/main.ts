@@ -9,13 +9,9 @@ export const registerServiceWorker = async () => {
 				scope: '/',
 			})
 			_clg({ text: 'main.js registration', data: registration })
-			if (registration.installing) {
-				_clg({ text: 'main.js Service worker installing' })
-			} else if (registration.waiting) {
-				_clg({ text: 'main.js Service worker installed' })
-			} else if (registration.active) {
-				_clg({ text: 'main.js Service worker active' })
-			}
+			_clg({ text: 'main.js registration.active', data: registration.active })
+			_clg({ text: 'main.js registration.installing', data: registration.installing })
+			_clg({ text: 'main.js registration.waiting', data: registration.waiting })
 		} catch (error) {
 			_clg({ text: `main.js Registration failed with ${error}` })
 		}
