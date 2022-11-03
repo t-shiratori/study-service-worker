@@ -10,8 +10,11 @@ export const registerServiceWorker = async () => {
 			})
 			_clg({ text: 'main.js registration', data: registration })
 			_clg({ text: 'main.js registration.active', data: registration.active })
+			_clg({ text: 'main.js registration.active.state', data: registration.active?.state })
 			_clg({ text: 'main.js registration.installing', data: registration.installing })
+			_clg({ text: 'main.js registration.installing.state', data: registration.installing?.state })
 			_clg({ text: 'main.js registration.waiting', data: registration.waiting })
+			_clg({ text: 'main.js registration.waiting.state', data: registration.waiting?.state })
 		} catch (error) {
 			_clg({ text: `main.js Registration failed with ${error}` })
 		}
