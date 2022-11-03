@@ -2,22 +2,13 @@ const CACHE_NAME = 'v1'
 const CACHE_ASSETS = ['/', '/src/main.ts', '/vite.svg', '/1000x1000_1.png', '/1000x1000_2.png']
 const API_DOMAIN = 'jsonplaceholder.typicode.com'
 
+// カスタムconsole.log
 const _clg = ({ text, data }) => {
 	const style = 'color: #ffffff; background: #9005b9; padding: 2px 6px;'
 	return data ? console.log(`%c${text}`, style, data) : console.log(`%c${text}`, style)
 }
 
 _clg({ text: 'service-worker.js' })
-
-self.addEventListener('install', (event) => {
-	_clg({ text: 'service-worker.js install!' })
-	_clg({ text: 'service-worker.js event', data: event })
-	// キャッシュの追加処理が完了するまでインストールが終わらないように待つ
-	event.waitUntil(
-		// キャッシュを開いてキャッシュストレージに追加する
-		caches.open(CACHE_NAME).then((cache) => cache.addAll(CACHE_ASSETS)),
-	)
-})
 
 const handleFetch = async (event) => {
 	_clg({ text: 'service-worker.js handleFetch', data: event })
@@ -56,6 +47,22 @@ const handleFetch = async (event) => {
 	}
 }
 
+/**
+ * Event Install
+ */
+self.addEventListener('install', (event) => {
+	_clg({ text: 'service-worker.js install!' })
+	_clg({ text: 'service-worker.js event', data: event })
+	// キャッシュの追加処理が完了するまでインストールが終わらないように待つ
+	event.waitUntil(
+		// キャッシュを開いてキャッシュストレージに追加する
+		caches.open(CACHE_NAME).then((cache) => cache.addAll(CACHE_ASSETS)),
+	)
+})
+
+/**
+ * Event Activate
+ */
 self.addEventListener('activate', async (event) => {
 	_clg({ text: 'service-worker.js activate!' })
 	_clg({ text: 'service-worker.js event: ', data: event })
@@ -77,6 +84,7 @@ self.addEventListener('activate', async (event) => {
 })
 
 /**
+ * Event Fetch
  * サービスワーカ-登録後に、ネットワークのインターセプト時に発火するイベント
  */
 self.addEventListener('fetch', (event) => {
