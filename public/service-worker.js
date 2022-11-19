@@ -8,6 +8,15 @@ const _clg = ({ text, data }) => {
 	return data ? console.log(`%c${text}`, style, data) : console.log(`%c${text}`, style)
 }
 
+const delay = (milliseconds) => {
+	return new Promise((resolve) => {
+		setTimeout(() => {
+			resolve()
+			_clg({ text: 'delay resolve' })
+		}, milliseconds)
+	})
+}
+
 _clg({ text: 'service-worker.js' })
 
 const handleFetch = async (event) => {
@@ -53,11 +62,16 @@ const handleFetch = async (event) => {
 self.addEventListener('install', (event) => {
 	_clg({ text: 'service-worker.js install!' })
 	_clg({ text: 'service-worker.js event', data: event })
-	// キャッシュの追加処理が完了するまでインストールが終わらないように待つ
-	event.waitUntil(
+
+	const cacheStart = async () => {
 		// キャッシュを開いてキャッシュストレージに追加する
-		caches.open(CACHE_NAME).then((cache) => cache.addAll(CACHE_ASSETS)),
-	)
+		const cache = await caches.open(CACHE_NAME)
+		await delay(2000)
+		return cache.addAll(CACHE_ASSETS)
+	}
+
+	// キャッシュの追加処理が完了するまでインストールが終わらないように待つ
+	event.waitUntil(cacheStart())
 })
 
 /**
@@ -69,6 +83,7 @@ self.addEventListener('activate', async (event) => {
 
 	const removeUnwantedCaches = async () => {
 		const cacheNames = await caches.keys()
+		await delay(2000)
 		await Promise.all(
 			cacheNames.map((cacheName) => {
 				_clg({ text: 'service-worker.js cache', data: cacheName })
